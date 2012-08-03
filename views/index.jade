@@ -3,48 +3,47 @@ extends layout
 block main
   h1 Postman
 
+  if typeof request != "undefined"
+    script(type="text/javascript")
+      window.request = !{JSON.stringify(request)};
 
 
   form(action="/post", method="post", data-fw="true")
     .row
       .one.columns
         label Protocol
-        input(type="text", name="request[protocol]", value=request.protocol)
+        input(type="text", name="request[protocol]")
       .two.columns
         label Hostname
-        input(type="text", name="request[hostname]", value=request.hostname)
+        input(type="text", name="request[hostname]")
       .one.columns
         label Port
-        input(type="text", name="request[port]", value=request.port)
-      .five.columns
-        label Pathname
-        input(type="text", name="request[pathname]", value=request.pathname)
+        input(type="text", name="request[port]")
       .two.columns
-        label Query
+        label Timeout
         .row.collapse
-          .one.columns
-            span.prefix ?
-          .eleven.columns
-            input(type="text", name="request[search]", value=request.search)
-
+          .nine.columns
+            input(type="text", name="request[timeout]")
+          .three.columns
+            span.postfix s
       .one.columns.end
         label Method
         select(name="request[method]")
           - var options = [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ]
           each option in options
-            option(value=option, selected=(option == request.method) ? "selected" : false)= option
+            option(value=option)= option
     .row
       .six.columns
+        label Pathname
+        input(type="text", name="request[pathname]")
+        label Query
+        .row.collapse
+          .one.columns
+            span.prefix ?
+          .eleven.columns
+            input(type="text", name="request[search]")
         textarea(name="request[body]")= request.body
       .six.columns
-        .row
-          .two.columns
-            label Timeout
-            .row.collapse
-              .nine.columns
-                input(type="text", name="request[timeout]", value=request.timeout)
-              .three.columns
-                span.postfix s
         .row
           .six.columns
             label Header name
@@ -52,14 +51,16 @@ block main
             label Header value
         - if (!request.headerName) request.headerName = [ ]
         - if (!request.headerValue) request.headerValue = [ ]
-        - for i in [0,1,2,3]
+        - for i in [0,1,2,3,4,5,6]
           .row
             .six.columns
-              input(type="text", name="request[headerName][#{i}]", value=request.headerName[i])
+              input(type="text", name="request[headers][#{i}][name]")
             .six.columns
-              input(type="text", name="request[headerValue][#{i}]", value=request.headerValue[i])
+              input(type="text", name="request[headers][#{i}][value]")
 
-    button(type="submit").large.success.button Submit!
+    button(type="submit").large.success.button POST!
 
-  button(id="clear", onclick="javascript:postman.clear();undefined;").small.secondary.button Clear
-  #responses
+  
+  #requests
+
+
