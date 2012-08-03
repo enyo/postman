@@ -1,5 +1,67 @@
 extends layout
 
-block content
+block main
   h1= title
   p Welcome to #{title}
+
+
+
+
+  form(action="/post", method="post", data-fw="true")
+    .row
+      .one.columns
+        label Protocol
+        input(type="text", name="request[protocol]", value=request.protocol)
+      .two.columns
+        label Hostname
+        input(type="text", name="request[hostname]", value=request.hostname)
+      .one.columns
+        label Port
+        input(type="text", name="request[port]", value=request.port)
+      .five.columns
+        label Pathname
+        input(type="text", name="request[pathname]", value=request.pathname)
+      .two.columns
+        label Search
+        .row.collapse
+          .one.columns
+            span.prefix ?
+          .eleven.columns
+            input(type="text", name="request[search]", value=request.search)
+
+      .one.columns.end
+        label Method
+        select(name="request[method]")
+          - var options = [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ]
+          each option in options
+            option(value=option, selected=(option == request.method) ? "selected" : false)= option
+    .row
+      .six.columns
+        textarea(name="request[body]")= request.body
+      .six.columns
+        .row
+          .two.columns
+            label Timeout
+            .row.collapse
+              .nine.columns
+                input(type="text", name="request[timeout]", value=request.timeout)
+              .three.columns
+                span.postfix s
+        .row
+          .six.columns
+            label Header name
+          .six.columns
+            label Header value
+        - if (!request.headerName) request.headerName = [ ]
+        - if (!request.headerValue) request.headerValue = [ ]
+        - for i in [0,1,2,3]
+          .row
+            .six.columns
+              input(type="text", name="request[headerName][#{i}]", value=request.headerName[i])
+            .six.columns
+              input(type="text", name="request[headerValue][#{i}]", value=request.headerValue[i])
+
+    button(type="submit").large.success.button Submit!
+
+  button(id="clear", onclick="javascript:postman.clear();undefined;").small.secondary.button Clear
+  #response

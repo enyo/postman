@@ -3,5 +3,13 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+
+    != js('ender')
+    != css('general')
+    != js('app')
+
   body
-    block content
+
+    .row
+      .twelve.columns
+        block main
