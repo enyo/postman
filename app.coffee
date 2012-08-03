@@ -5,11 +5,15 @@ express = require "express"
 routes = require "./routes"
 http = require "http"
 path = require "path"
+config = require "config"
+mongoose = require "mongoose"
 
 app = express()
 
 app.configure ->
-  app.set "port", process.env.PORT or 3000
+  mongoose.connect config.mongoose.connectPath
+
+  app.set "port", process.env.PORT or config.general.port
   app.set "views", __dirname + "/views"
   app.set "view engine", "jade"
   app.use express.favicon()
@@ -20,10 +24,21 @@ app.configure ->
   app.use express.static(path.join(__dirname, "public"))
   app.use require("connect-assets")(src: "#{__dirname}/assets", buildDir: "#{__dirname}/cache/built-assets")
 
+  RedisStore = require("connect-redis")(express)
+
+  app.use express.session
+    store: new RedisStore
+      socket: "/tmp/redis.sock"
+      host: "localhost"
+    secret: config.session.secret
+
+
+
 app.configure "development", ->
   app.use express.errorHandler()
 
 app.get "/", routes.index
+app.get "/:id", routes.request
 app.post "/post", routes.post
 
 

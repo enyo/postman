@@ -1,0 +1,8 @@
+general:
+  port: 4321
+
+mongoose:
+  connectPath: mongodb://localhost/postman
+
+session:
+  secret: deiNgudoh7Fivoo7phu6
