@@ -40,7 +40,6 @@ exports.post = (req, res, next) ->
     timeout: requestData.timeout * 1000
     headers: headers
   }, (err, response, body) ->
-    content = if err? then err.message else body
-    res.send "#{formattedUrl}\n#{content}"
+    res.send { url: formattedUrl, response: response, error: err, body: body }
 
   # res.send url.format requestData

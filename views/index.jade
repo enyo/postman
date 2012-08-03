@@ -1,9 +1,7 @@
 extends layout
 
 block main
-  h1= title
-  p Welcome to #{title}
-
+  h1 Postman
 
 
 
@@ -64,4 +62,4 @@ block main
     button(type="submit").large.success.button Submit!
 
   button(id="clear", onclick="javascript:postman.clear();undefined;").small.secondary.button Clear
-  #response
+  #responses
