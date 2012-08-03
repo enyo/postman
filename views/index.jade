@@ -58,7 +58,12 @@ block main
             .six.columns
               input(type="text", name="request[headers][#{i}][value]")
 
-    button(type="submit").large.success.button POST!
+    .row
+      .two.columns
+        button(type="submit").large.success.button POST!
+      .eight.columns.end
+        p Only when you click this button will postman actually trigger a request. Every reload after then will <strong>not</strong> trigger a request but show a cached response.
+
 
   
   #requests
