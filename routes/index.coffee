@@ -4,22 +4,35 @@ request = require "request"
 url = require "url"
 Request = require "../models/request"
 convert = require "./convert"
-
+config = require "config"
 
 
 exports.index = (req, res) ->
   res.render "index",
     request:
       protocol: "http"
-      pathname: "/"
+      pathname: "/test"
       hostname: "localhost"
       method: "GET"
-      port: 80
+      port: config.general.port
       timeout: 10 # seconds
+      body: '{ "name": "Postman" }'
       headers: [
         {
           name: "Content-Type"
           value: "application/json; charset=utf-8"
+        }
+        {
+          name: "Accept"
+          value: "application/json"
+        }
+        {
+          name: "Accept-Charset"
+          value: "ISO-8859-1,utf-8;q=0.7,*;q=0.3"
+        }
+        {
+          name: "Accept-Encoding"
+          value: "gzip,deflate,sdch"
         }
       ]
 
@@ -45,7 +58,7 @@ doRequest = (requestDoc, callback) ->
   request {
     url: requestDoc.formattedUrl
     method: requestDoc.method
-    body: requestDoc.body
+    body: requestDoc.body || null
     timeout: requestDoc.timeout * 1000
     headers: headers
     followRedirect: no
@@ -80,3 +93,11 @@ exports.post = (req, res, next) ->
       requestDoc.save (err) ->
         return next err if err?
         res.send requestDoc
+
+
+exports.test = (req, res, next) ->
+  data = currentTime: new Date().getTime()
+  data.hello = req.body.name if req.body?.name?
+  res.send data
+
+

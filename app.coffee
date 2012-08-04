@@ -38,6 +38,7 @@ app.configure "development", ->
   app.use express.errorHandler()
 
 app.get "/", routes.index
+app.get "/test", routes.test
 app.get "/:id", routes.request
 app.post "/post", routes.post
 

@@ -5,7 +5,7 @@ block main
 
   if typeof request != "undefined"
     script(type="text/javascript")
-      window.request = !{JSON.stringify(request)};
+      window.request = !{JSON.stringify(request).replace(/script/g, 'scr"+"ipt').replace(/\<\!\-\-/g, '<"+"!--')};
 
 
   form(action="/post", method="post", data-fw="true")

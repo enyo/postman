@@ -10,7 +10,7 @@ escapeHtml = (unsafe) ->
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/'/g, "&#039;")
 
 
 Formwatcher.defaultOptions.onSuccess = (request) ->
@@ -31,14 +31,13 @@ requestKeys = [
 ]
 
 showRequest = (request, fromHistory = false) ->
-  console.log request
+
   for key in requestKeys
     $("form *[name='request[#{key}]']").val "#{request[key] || ""}"
 
   for header, i in request.headers
     $("form [name='request[headers][#{i}][name]']").val "#{header.name || ""}"
     $("form [name='request[headers][#{i}][value]']").val "#{header.value || ""}"
-    console.log "form [name='request[#{i}][name]']"
 
   responseContainer = $   """
                           <section class="request">
