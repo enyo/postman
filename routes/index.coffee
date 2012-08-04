@@ -77,22 +77,25 @@ exports.post = (req, res, next) ->
 
   requestDoc.save (err) ->
     return next err if err?
-    doRequest requestDoc, (err, response, body) ->
-      requestDoc.response = { } unless requestDoc.response?
+    if req.body.saveOnly
+      res.send requestDoc
+    else
+      doRequest requestDoc, (err, response, body) ->
+        requestDoc.response = { } unless requestDoc.response?
 
-      if err?
-        requestDoc.response.error = err.code
+        if err?
+          requestDoc.response.error = err.code
 
-      if response?
-        requestDoc.response.statusCode = response.statusCode
-        requestDoc.response.headers = convert.headerObjectToArray response.headers
+        if response?
+          requestDoc.response.statusCode = response.statusCode
+          requestDoc.response.headers = convert.headerObjectToArray response.headers
 
-      if body?
-        requestDoc.response.body = body
+        if body?
+          requestDoc.response.body = body
 
-      requestDoc.save (err) ->
-        return next err if err?
-        res.send requestDoc
+        requestDoc.save (err) ->
+          return next err if err?
+          res.send requestDoc
 
 
 exports.test = (req, res, next) ->
