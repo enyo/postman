@@ -4,5 +4,7 @@ general:
 mongoose:
   connectPath: mongodb://localhost/postman
 
+
 session:
+  redisSocket: /tmp/redis.sock
   secret: deiNgudoh7Fivoo7phu6

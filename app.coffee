@@ -28,7 +28,7 @@ app.configure ->
 
   app.use express.session
     store: new RedisStore
-      socket: "/tmp/redis.sock"
+      socket: config.session.redisSocket
       host: "localhost"
     secret: config.session.secret
 
