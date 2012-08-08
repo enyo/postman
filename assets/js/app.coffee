@@ -35,6 +35,9 @@ showRequest = (request, fromHistory = false) ->
   for key in requestKeys
     $("form *[name='request[#{key}]']").val "#{request[key] || ""}"
 
+  $("form input.header-name").val ""
+  $("form input.header-value").val ""
+
   for header, i in request.headers
     $("form [name='request[headers][#{i}][name]']").val "#{header.name || ""}"
     $("form [name='request[headers][#{i}][value]']").val "#{header.value || ""}"

@@ -54,9 +54,9 @@ block main
         - for i in [0,1,2,3,4,5,6]
           .row
             .six.columns
-              input(type="text", name="request[headers][#{i}][name]")
+              input(type="text", name="request[headers][#{i}][name]").header-name
             .six.columns
-              input(type="text", name="request[headers][#{i}][value]")
+              input(type="text", name="request[headers][#{i}][value]").header-value
 
     .row
       .one.columns
