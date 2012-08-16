@@ -69,8 +69,12 @@ window.postman =
 
     @updateHistory request._history
 
+    $("form *[name='request[name]']").val ""
     for key in requestKeys
-      $("form *[name='request[#{key}]']").val "#{request[key] || ""}"
+      if key == "name"
+        $("form h2#request-name span").text request[key]
+      else
+        $("form *[name='request[#{key}]']").val "#{request[key] || ""}"
 
     $("form input.header-name").val ""
     $("form input.header-value").val ""
