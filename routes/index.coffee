@@ -9,7 +9,7 @@ config = require "config"
 
 
 _loadAllRequests = (callback) ->
-  Request.find().sort("-_id").limit(config.general.historyLength).select("_id name formattedUrl").where("name").ne("").exec (err, docs) ->
+  Request.find().sort("-_id").limit(config.general.historyLength).select("_id name formattedUrl").where("name").ne("").exists().exec (err, docs) ->
     callback err, docs
 
 # Renders the index site with given requestDoc
