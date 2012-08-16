@@ -4,6 +4,7 @@ Request = require "../models/request"
 
 
 keys = [
+  "name"
   "protocol"
   "pathname"
   "port"

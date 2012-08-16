@@ -1,4 +1,6 @@
 
+@import "nib"
+
 @import "foundation.css"
 
 
@@ -9,6 +11,16 @@
   margin-bottom 150px
 
 
+.request-name
+  input
+    font-weight bold
+
+.history
+  h3
+    margin 0 0 20px 0
+  .history-request
+    display block
+    line-height 150%
 
 #requests
   .request
@@ -19,7 +31,7 @@
       position relative
       .permaLink
         position absolute
-        top 0
+        top -20px
         right 0
         font-weight bold
         font-size 1.4em
@@ -35,5 +47,40 @@
   .error
     color red
 
+#loading
+  display none
+  position fixed
+  top 0
+  bottom 0
+  left 0
+  right 0
+  background rgba(255, 255, 255, 0.6)
+  z-index 1000
+  &.visible
+    display block
+  span
+    font-weight bold
+    display block
+    position absolute
+    width 200px
+    height 50px
+    line-height @height
+    margin-left -(@width / 2)
+    margin-top -(@height / 2)
+    left 50%
+    top 50%
+    font-size 40px
+    color rgba(0, 0, 0, 0.8)
+    text-align center
+
 textarea
   min-height 200px
+
+
+footer
+  .version
+    display block
+    fixed bottom 10px right 10px
+    color #555
+    font-size 0.8em
+    background rgba(255, 255, 255, 0.7)
