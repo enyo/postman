@@ -72,7 +72,7 @@ window.postman =
     $("form *[name='request[name]']").val ""
     for key in requestKeys
       if key == "name"
-        $("form h2#request-name span").text request[key]
+        $("form h2#request-name span").text request[key] || ""
       else
         $("form *[name='request[#{key}]']").val "#{request[key] || ""}"
 
