@@ -8,6 +8,7 @@ HeaderSchema = new mongoose.Schema
   value: String
 
 RequestSchema = new mongoose.Schema
+  name: String
   formattedUrl: String
   protocol: String
   hostname: String

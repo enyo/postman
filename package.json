@@ -11,7 +11,7 @@
     "jade": "*",
     "connect-assets": "2.x",
     "request": "2.x",
-    "mongoose": "2.x",
+    "mongoose": "3.x",
     "connect-redis": "1.x",
     "stylus": "0.x"
   }

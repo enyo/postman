@@ -1,5 +1,6 @@
 general:
   port: 4321
+  historyLength: 50
 
 mongoose:
   connectPath: mongodb://localhost/postman

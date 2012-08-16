@@ -10,64 +10,78 @@ block main
 
   form(action="/post", method="post", data-fw="true")
     .row
-      .one.columns
-        label Protocol
-        input(type="text", name="request[protocol]")
-      .two.columns
-        label Hostname
-        input(type="text", name="request[hostname]")
-      .one.columns
-        label Port
-        input(type="text", name="request[port]")
-      .two.columns
-        label Timeout
-        .row.collapse
-          .nine.columns
-            input(type="text", name="request[timeout]")
-          .three.columns
-            span.postfix s
-      .one.columns.end
-        label Method
-        select(name="request[method]")
-          - var options = [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ]
-          each option in options
-            option(value=option)= option
-    .row
-      .six.columns
-        label Pathname
-        input(type="text", name="request[pathname]")
-        label Query
-        .row.collapse
+      .two.columns.history
+        h3 History
+        div.history-elements
+
+
+      .ten.columns
+        .row
+          .six.columns.end.request-name
+            label Request name
+            input(type="text", name="request[name]")
+
+        .row
           .one.columns
-            span.prefix ?
-          .eleven.columns
-            input(type="text", name="request[search]")
-        textarea(name="request[body]")= request.body
-      .six.columns
+            label Protocol
+            input(type="text", name="request[protocol]")
+          .two.columns
+            label Hostname
+            input(type="text", name="request[hostname]")
+          .one.columns
+            label Port
+            input(type="text", name="request[port]")
+          .two.columns
+            label Timeout
+            .row.collapse
+              .nine.columns
+                input(type="text", name="request[timeout]")
+              .three.columns
+                span.postfix s
+          .one.columns.end
+            label Method
+            select(name="request[method]")
+              - var options = [ "POST", "GET", "PUT", "DELETE", "OPTIONS" ]
+              each option in options
+                option(value=option)= option
         .row
           .six.columns
-            label Header name
+            label Pathname
+            input(type="text", name="request[pathname]")
+            label Query
+            .row.collapse
+              .one.columns
+                span.prefix ?
+              .eleven.columns
+                input(type="text", name="request[search]")
+            textarea(name="request[body]")= request.body
           .six.columns
-            label Header value
-        - if (!request.headerName) request.headerName = [ ]
-        - if (!request.headerValue) request.headerValue = [ ]
-        - for i in [0,1,2,3,4,5,6]
-          .row
-            .six.columns
-              input(type="text", name="request[headers][#{i}][name]").header-name
-            .six.columns
-              input(type="text", name="request[headers][#{i}][value]").header-value
+            .row
+              .six.columns
+                label Header name
+              .six.columns
+                label Header value
+            - if (!request.headerName) request.headerName = [ ]
+            - if (!request.headerValue) request.headerValue = [ ]
+            - for i in [0,1,2,3,4,5,6]
+              .row
+                .six.columns
+                  input(type="text", name="request[headers][#{i}][name]").header-name
+                .six.columns
+                  input(type="text", name="request[headers][#{i}][value]").header-value
 
-    .row
-      .one.columns
-        button(type="submit").success.button POST!
-      .one.columns
-        button(type="submit", name="saveOnly", value="1").secondary.button Save
-      .eight.columns.end
-        p Only when you click the POST button will postman actually trigger a request. Every reload after then will <strong>not</strong> trigger a request but show a cached response.
+        .row
+          .one.columns
+            button(type="submit").success.button POST!
+          .one.columns
+            button(type="submit", name="saveOnly", value="1").secondary.button Save
+          .eight.columns.end
+            p Only when you click the POST button will postman actually trigger a request. Every reload after then will <strong>not</strong> trigger a request but show a cached response.
 
 
   
   #requests
 
 
+  #loading
+    span Loading...
