@@ -1,7 +1,6 @@
 extends layout
 
 block main
-  h1 Postman
 
   if typeof request != "undefined"
     script(type="text/javascript")
@@ -11,11 +10,16 @@ block main
   form(action="/post", method="post", data-fw="true")
     .row
       .two.columns.history
+        h1 Postman
+
         h3 History
         div.history-elements
 
 
       .ten.columns
+        h2#request-name
+          span
+          | &nbsp;
         .row
           .six.columns.end.request-name
             label Request name
