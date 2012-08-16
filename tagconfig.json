@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "name": "package.json",
+      "regexs": [
+        "\"version\": \"###\""
+      ]
+    },
+    {
+      "name": "views/layout.jade",
+      "regexs": [
+        "\\.version ###"
+      ]
+    }
+  ]
+}

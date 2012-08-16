@@ -1,6 +1,6 @@
 {
   "name": "application-name",
-  "version": "0.0.1",
+  "version": "0.1.0-dev",
   "private": true,
   "scripts": {
     "start": "node app"
@@ -13,6 +13,7 @@
     "request": "2.x",
     "mongoose": "3.x",
     "connect-redis": "1.x",
-    "stylus": "0.x"
+    "stylus": "0.x",
+    "nib": "0.x"
   }
 }

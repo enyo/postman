@@ -7,6 +7,7 @@ http = require "http"
 path = require "path"
 config = require "config"
 mongoose = require "mongoose"
+nib = require "nib"
 
 app = express()
 
