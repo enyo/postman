@@ -26,14 +26,28 @@ requestKeys = [
 ]
 
 
+$.domReady -> postman.init()
+
+
 window.postman =
 
   loading: no
 
   history: [ ]
+  bookmarks: [ ]
+
+  init: ->
+    bookmarksLink = $ "#history .sub-nav .bookmarks a"
+    historyLink = $ "#history .sub-nav .history a"
+
+    bean.add $("#request-links .sub-nav .bookmarks a"), "click", ->
+    bean.add $("#request-links .sub-nav .history a"), "click", ->
+    @showRequest window.request if window.request
+
+
 
   clear: ->
-    $("#requests").html ""
+    $("#request").html ""
 
 
   # Loads the request and shows it.  
@@ -56,23 +70,33 @@ window.postman =
 
 
   updateHistory: (@history) ->
-    historyContainer = $ ".history-elements"
-    historyContainer.html ""
-    for request in history
+    container = $ "#request-links #history-tab"
+    @_updateRequestLinks container, @history
+
+  updateBookmarks: (@bookmarks) ->
+    container = $ "#request-links #bookmarks-tab"
+    @_updateRequestLinks container, @bookmarks
+
+  _updateRequestLinks: (container, requests) ->
+    container.html ""
+    for request in requests
       do (request) =>
-        link = $ """<a class="history-request" href="javascript:undefined;">#{request.name || request.formattedUrl}</a>"""
+        link = $ """<a href="javascript:undefined;">#{request.name || request.formattedUrl}</a>"""
         bean.add link.get(0), "click", => @loadRequest request._id
-        historyContainer.append link
+        container.append link
+
+
 
   # Inserts all fields to show the request
   showRequest: (request, fromHistory = false) ->
 
     @updateHistory request._history
+    @updateBookmarks request._bookmarks
 
     $("form *[name='request[name]']").val ""
     for key in requestKeys
       if key == "name"
-        $("form h2#request-name span").text request[key] || ""
+        $("h2#request-name span").text request[key] || ""
       else
         $("form *[name='request[#{key}]']").val "#{request[key] || ""}"
 
@@ -89,9 +113,11 @@ window.postman =
                                   <div class="url"><h3>#{request.formattedUrl ? ""}</h3></div>
                               </header>
                               <div class="row">
-                                <div class="five columns headers">
+                                <div class="five columns">
+                                  <div class="headers"></div>
                                 </div>
-                                <div class="seven columns body">
+                                <div class="seven columns">
+                                  <div class="body"></div>
                                 </div>
                             </section>
                             """
@@ -100,17 +126,19 @@ window.postman =
     responseHeaders = responseContainer.find ".headers"
     responseBody = responseContainer.find ".body"
 
+
     if request._id
       permaLink = "/#{request._id}"
-      responseHeader.append $ """<div class="permaLink"><a href="#{permaLink}">Permalink</a></div>""" 
-    
-    
+
     if request.response?
       responseHeader.append $ """<div class="error">#{request.response.error}</div>""" if request.response.error
 
+      headers = request.response.headers
+      headers = [{ name: "Status Code", value: request.response.statusCode }].concat headers
+      headers = [{ name: "Postman link", value: """<a href="#{permaLink}">#{permaLink}</a>""" }].concat headers if permaLink
 
-      headers = ("<tr><td>#{header.name}</td><td>#{header.value}</td></tr>" for header in request.response.headers).join("")
-      headers = "<table><tr><td>Status Code:</td><td>#{request.response.statusCode}</td></tr>#{headers}</table>"
+      headers = ("<tr><td>#{header.name}</td><td>#{header.value}</td></tr>" for header in headers).join("")
+      headers = "<table>#{headers}</table>"
 
       responseHeaders.append headers
 
@@ -125,7 +153,7 @@ window.postman =
 
       responseContainer.append $ """<hr />"""
       
-    $("#requests").html responseContainer
+    $("#request").html responseContainer
 
     unless fromHistory
       history.pushState request, request.formattedUrl, permaLink if permaLink

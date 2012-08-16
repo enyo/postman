@@ -8,13 +8,24 @@ html
     != css('general')
     != js('app')
 
+    if typeof request != "undefined"
+      script(type="text/javascript")
+        window.request = !{JSON.stringify(request).replace(/script/g, 'scr"+"ipt').replace(/\<\!\-\-/g, '<"+"!--')};
+
   body
+
+    header
+      .row
+        .twelve.columns
+          h1: span Postman
+
 
     .row
       .twelve.columns
-        block main
+        #main
+          block main
 
 
     footer.row
       .twelve.columns
-        .version 0.1.4
+        .version 0.1.5

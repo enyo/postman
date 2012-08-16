@@ -4,43 +4,39 @@
 @import "foundation.css"
 
 
+header
+  h1
+    border-bottom 1px solid #aaa
+  margin-bottom 30px
+
+
+
 .row
   width 1280px
 
 #main
   margin-bottom 150px
 
+  #request-name
+    margin-top 0
+  .request-name
+    input
+      font-weight bold
 
-.request-name
-  input
-    font-weight bold
+  #request-links
+    .tabs-content
+      li
+        max-height 460px
+        overflow auto
+        a
+          display block
+          line-height 150%
+          overflow ellipsis
 
-.history
-  h3
-    margin 0 0 20px 0
-  .history-elements
-    max-height 460px
-    overflow auto
-    .history-request
-      display block
-      line-height 150%
-      overflow ellipsis
-
-#requests
-  .request
-    font-family monospace
-    font-size 12px
-
-    header
-      position relative
-      .permaLink
-        position absolute
-        top -20px
-        right 0
-        font-weight bold
-        font-size 1.4em
-
+  #request
     .body
+      font-family monospace
+      font-size 12px
       font-size 11px
       white-space pre
       background #fafafa
@@ -48,37 +44,37 @@
       overflow auto
 
 
-  .error
-    color red
+    .error
+      color red
 
-#loading
-  display none
-  position fixed
-  top 0
-  bottom 0
-  left 0
-  right 0
-  background rgba(255, 255, 255, 0.6)
-  z-index 1000
-  &.visible
-    display block
-  span
-    font-weight bold
-    display block
-    position absolute
-    width 200px
-    height 50px
-    line-height @height
-    margin-left -(@width / 2)
-    margin-top -(@height / 2)
-    left 50%
-    top 50%
-    font-size 40px
-    color rgba(0, 0, 0, 0.8)
-    text-align center
+  #loading
+    display none
+    position fixed
+    top 0
+    bottom 0
+    left 0
+    right 0
+    background rgba(255, 255, 255, 0.6)
+    z-index 1000
+    &.visible
+      display block
+    span
+      font-weight bold
+      display block
+      position absolute
+      width 200px
+      height 50px
+      line-height @height
+      margin-left -(@width / 2)
+      margin-top -(@height / 2)
+      left 50%
+      top 50%
+      font-size 40px
+      color rgba(0, 0, 0, 0.8)
+      text-align center
 
-textarea
-  min-height 200px
+  textarea
+    min-height 200px
 
 
 footer

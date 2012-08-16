@@ -1,25 +1,26 @@
 extends layout
 
+
+
 block main
 
-  if typeof request != "undefined"
-    script(type="text/javascript")
-      window.request = !{JSON.stringify(request).replace(/script/g, 'scr"+"ipt').replace(/\<\!\-\-/g, '<"+"!--')};
+  .row
+    .three.columns
+      #request-links
+        dl.tabs.contained
+          dd.bookmarks.active: a(href="#bookmarks") Bookmarks
+          dd.history: a(href="#history") History
 
+        ul.tabs-content.contained
+          li#bookmarks-tab.active
+          li#history-tab
 
-  form(action="/post", method="post", data-fw="true")
-    .row
-      .two.columns.history
-        h1 Postman
+    .nine.columns
+      h2#request-name
+        span
+        | &nbsp;
 
-        h3 History
-        div.history-elements
-
-
-      .ten.columns
-        h2#request-name
-          span
-          | &nbsp;
+      form(action="/post", method="post", data-fw="true")
         .row
           .six.columns.end.request-name
             label Request name
@@ -75,16 +76,16 @@ block main
                   input(type="text", name="request[headers][#{i}][value]").header-value
 
         .row
-          .one.columns
-            button(type="submit").success.button POST!
-          .one.columns
-            button(type="submit", name="saveOnly", value="1").secondary.button Save
-          .eight.columns.end
+          .three.columns
+            button(type="submit").radius.success.button POST!
+            |  
+            button(type="submit", name="saveOnly", value="1").radius.secondary.button Stash
+          .nine.columns.end
             p Only when you click the POST button will postman actually trigger a request. Every reload after then will <strong>not</strong> trigger a request but show a cached response.
 
 
   
-  #requests
+  #request
 
 
   #loading

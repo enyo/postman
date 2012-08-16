@@ -8,9 +8,20 @@ config = require "config"
 
 
 
-_loadAllRequests = (callback) ->
-  Request.find().sort("-_id").limit(config.general.historyLength).select("_id name formattedUrl").where("name").ne("").exists().exec (err, docs) ->
-    callback err, docs
+_loadAllRequests = (bookmarks, callback) ->
+  query = Request
+    .find()
+    .sort("-_id")
+    .limit(config.general.historyLength)
+    .select("_id name formattedUrl")
+
+  if bookmarks
+    query.where("name").ne("").exists()
+  else
+    query.where("name").equals("")
+
+  query.exec (err, docs) -> callback err, docs
+
 
 # Renders the index site with given requestDoc
 _showRequest = (requestDoc, req, res, next) ->
@@ -21,10 +32,13 @@ _showRequest = (requestDoc, req, res, next) ->
 
 
 _addHistory = (object, callback) ->
-  _loadAllRequests (err, requests) ->
+  _loadAllRequests false, (err, requests) ->
     callback err if err?
     object._history = requests
-    callback null, object
+    _loadAllRequests true, (err, requests) ->
+      callback err if err?
+      object._bookmarks = requests
+      callback null, object
 
 
 
@@ -107,8 +121,14 @@ exports.post = (req, res, next) ->
 
   requestDoc.save (err) ->
     return next err if err?
+
+    onFinish = (doc) ->
+      _addHistory doc.toJSON(), (err, doc) ->
+        return next err if err?
+        res.send doc
+
     if req.body.saveOnly
-      res.send requestDoc
+      onFinish requestDoc
     else
       doRequest requestDoc, (err, response, body) ->
         requestDoc.response = { } unless requestDoc.response?
@@ -125,9 +145,7 @@ exports.post = (req, res, next) ->
 
         requestDoc.save (err) ->
           return next err if err?
-          _addHistory requestDoc.toJSON(), (err, doc) ->
-            return next err if err?
-            res.send doc
+          onFinish requestDoc
 
 
 
