@@ -109,9 +109,6 @@ window.postman =
 
     responseContainer = $   """
                             <section class="request">
-                              <header>
-                                  <div class="url"><h3>#{request.formattedUrl ? ""}</h3></div>
-                              </header>
                               <div class="row">
                                 <div class="five columns">
                                   <div class="headers"></div>
@@ -131,7 +128,7 @@ window.postman =
       permaLink = "/#{request._id}"
 
     if request.response?
-      responseHeader.append $ """<div class="error">#{request.response.error}</div>""" if request.response.error
+      responseHeader.append $ """<div class="errosr">#{request.response.error}</div>""" if request.response.error
 
       headers = request.response.headers
       headers = [
