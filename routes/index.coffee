@@ -27,8 +27,11 @@ _loadAllRequests = (bookmarks, callback) ->
 _showRequest = (requestDoc, req, res, next) ->
   _addHistory requestDoc, (err, doc) ->
     return next err if err?
-    res.render "index",
-      request: requestDoc
+    if req.xhr
+        res.send doc
+    else
+      res.render "index",
+        request: doc
 
 
 _addHistory = (object, callback) ->
@@ -39,6 +42,28 @@ _addHistory = (object, callback) ->
       callback err if err?
       object._bookmarks = requests
       callback null, object
+
+# Actually perform the request and callback
+_doRequest = (requestDoc, callback) ->
+  headers = convert.headerArrayToObject requestDoc.headers
+
+  request {
+    url: requestDoc.formattedUrl
+    method: requestDoc.method
+    body: requestDoc.body || null
+    timeout: requestDoc.timeout * 1000
+    headers: headers
+    followRedirect: no
+  }, (err, response, body) ->
+    callback err, response, body
+
+
+
+
+
+
+# And now the actual routes!
+# ==========================
 
 
 
@@ -74,9 +99,6 @@ exports.index = (req, res, next) ->
   _showRequest fakeRequest, req, res, next
 
 
-
-
-
 # Shows a given rquest.
 exports.request = (req, res, next) ->
   requestId = req.params?.id
@@ -85,30 +107,10 @@ exports.request = (req, res, next) ->
   Request.findById requestId, (err, doc) ->
     return next err if err?
     return next new Error "Invalid ID" unless doc?
-    if req.xhr
-      _addHistory doc.toJSON(), (err, doc) ->
-        return next err if err?
-        res.send doc
-    else
-      _showRequest doc.toJSON(), req, res, next
+    _showRequest doc.toJSON(), req, res, next
 
 
 
-
-
-# Actually perform the request and callback
-doRequest = (requestDoc, callback) ->
-  headers = convert.headerArrayToObject requestDoc.headers
-
-  request {
-    url: requestDoc.formattedUrl
-    method: requestDoc.method
-    body: requestDoc.body || null
-    timeout: requestDoc.timeout * 1000
-    headers: headers
-    followRedirect: no
-  }, (err, response, body) ->
-    callback err, response, body
 
 
 # Post a new request
@@ -130,7 +132,7 @@ exports.post = (req, res, next) ->
     if req.body.saveOnly
       onFinish requestDoc
     else
-      doRequest requestDoc, (err, response, body) ->
+      _doRequest requestDoc, (err, response, body) ->
         requestDoc.response = { } unless requestDoc.response?
 
         if err?
@@ -147,6 +149,17 @@ exports.post = (req, res, next) ->
           return next err if err?
           onFinish requestDoc
 
+
+exports.delete = (req, res, next) ->
+  requestId = req.params?.id
+  return next new Error "No ID" unless requestId
+
+  requestDoc = new Request _id: requestId
+  requestDoc.remove (err) ->
+    return next err if err?
+    _addHistory { }, (err, obj) ->
+      return next err if err?
+      res.send obj
 
 
 

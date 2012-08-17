@@ -50,24 +50,43 @@ window.postman =
     $("#request").html ""
 
 
-  # Loads the request and shows it.  
-  loadRequest: (id) ->
+  reqwest: (options) ->
+    return if @loading
+
     @loading = yes
     $("#loading").addClass "visible"
-    reqwest
+
+    error = options.error
+    complete = options.complete
+    options.error = (err) =>
+      alert "Error loading request #{id}. Status: #{err.status}"
+      error err if error?
+    options.complete = =>
+      @loading = no
+      $("#loading").removeClass "visible"
+      complete() if complete?
+
+    reqwest options
+
+
+  # Loads the request and shows it.  
+  loadRequest: (id) ->
+    @reqwest
       url: "/#{id}"
       type: "json"
       method: "get"
       success: (request) =>
         @showRequest request
 
-      error: (err) =>
-        alert "Error loading request #{id}. Status: #{err.status}"
 
-      complete: =>
-        @loading = no
-        $("#loading").removeClass "visible"
-
+  deleteRequest: (id) ->
+    @reqwest
+      url: "/#{id}"
+      type: "json"
+      method: "delete"
+      success: (response) =>
+        @updateHistory response._history
+        @updateBookmarks response._bookmarks
 
   updateHistory: (@history) ->
     container = $ "#request-links #history-tab"
@@ -81,9 +100,12 @@ window.postman =
     container.html ""
     for request in requests
       do (request) =>
-        link = $ """<a href="javascript:undefined;">#{request.name || request.formattedUrl}</a>"""
+        row = $ """<div class="row"><div class="ten columns"><a class="link" href="javascript:undefined;">#{request.name || request.formattedUrl}</a></div><div class="two column"><a href="javascript:undefined;" class="delete right">✖</a></div></div>"""
+        link = $ ".link", row
+        deleteLink = $ ".delete", row
         bean.add link.get(0), "click", => @loadRequest request._id
-        container.append link
+        bean.add deleteLink.get(0), "click", => @deleteRequest request._id
+        container.append row
 
 
 

@@ -41,6 +41,7 @@ app.configure "development", ->
 app.get "/", routes.index
 app.get "/test", routes.test
 app.get "/:id", routes.request
+app.delete "/:id", routes.delete
 app.post "/post", routes.post
 
 
