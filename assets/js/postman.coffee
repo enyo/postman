@@ -134,10 +134,13 @@ window.postman =
       responseHeader.append $ """<div class="error">#{request.response.error}</div>""" if request.response.error
 
       headers = request.response.headers
-      headers = [{ name: "Status Code", value: request.response.statusCode }].concat headers
+      headers = [
+        { name: "Formatted URL", value: request.formattedUrl || "" }
+        { name: "Status Code", value: request.response.statusCode }
+      ].concat headers
       headers = [{ name: "Postman link", value: """<a href="#{permaLink}">#{permaLink}</a>""" }].concat headers if permaLink
 
-      headers = ("<tr><td>#{header.name}</td><td>#{header.value}</td></tr>" for header in headers).join("")
+      headers = ("""<tr><td class="name"><div>#{header.name}</div></td><td class="value"><div>#{header.value}</div></td></tr>""" for header in headers).join("")
       headers = "<table>#{headers}</table>"
 
       responseHeaders.append headers

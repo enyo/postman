@@ -37,6 +37,24 @@ header
     .url
       h3
         overflow ellipsis
+    .headers
+      z-index 500
+      position relative
+      table
+        &:hover
+          table-layout auto
+          td
+            div
+              overflow visible
+
+        table-layout fixed
+        width 100%
+        td
+          width auto
+          div
+            overflow ellipsis
+        .name
+          width 150px
     .body
       font-family monospace
       font-size 12px
