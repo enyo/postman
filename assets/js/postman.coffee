@@ -100,7 +100,7 @@ window.postman =
     container.html ""
     for request in requests
       do (request) =>
-        row = $ """<div class="row"><div class="ten columns"><a class="link" href="javascript:undefined;">#{request.name || request.formattedUrl}</a></div><div class="two column"><a href="javascript:undefined;" class="delete right">✖</a></div></div>"""
+        row = $ """<div class="row"><div class="ten mobile-three columns"><a class="link" href="javascript:undefined;">#{request.name || request.formattedUrl}</a></div><div class="two mobile-one column"><a href="javascript:undefined;" class="delete right">✖</a></div></div>"""
         link = $ ".link", row
         deleteLink = $ ".delete", row
         bean.add link.get(0), "click", => @loadRequest request._id
